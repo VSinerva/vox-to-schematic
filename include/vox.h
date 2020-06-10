@@ -12,4 +12,14 @@ struct xyz
 	}
 };
 
+struct voxel
+{
+	xyz loc;
+	int colorIndex;
+	
+	voxel(xyz _loc, int _colorIndex) : loc(_loc), colorIndex(_colorIndex)
+	{
+	}
+};
+
 #endif
