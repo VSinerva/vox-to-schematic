@@ -1,6 +1,17 @@
 #include "vox.h"
 #include <cstdint>
 
+
+//XYZ
+void xyz::translate(xyz translation)
+{
+	x += translation.x;
+	y += translation.y;
+	z += translation.z;
+}
+
+
+//MODEL
 model::model(int _id, xyz _size) : id(_id), size(_size)
 {
 	//Store voxel for each xyz location to allow xyz-based indexing
@@ -20,7 +31,7 @@ model::model(int _id, xyz _size) : id(_id), size(_size)
 	}
 }
 
-void model::translate(xyz trans)
+void model::translate(xyz translation)
 {
 	//Loop over all elements with nested for-loops instead of a for-each
 	//because dynamic-arrays don't work with a for-each loop
@@ -30,18 +41,15 @@ void model::translate(xyz trans)
 		{
 			for( int z{ 0 }; z < size.z; ++z)
 			{
-				xyz temp = data[x + size.x*( y + z*size.y)].loc;
-
-				data[x + size.x*( y + z*size.y)].loc = xyz(
-						temp.x + trans.x,
-						temp.y + trans.y,
-						temp.z + trans.z);
+				data[x + size.x*( y + z*size.y)].loc.translate(translation);
 			}
 		}
 	}
 }
 
-void model::rotate(std::uint8_t rotationMatrix)
+
+//NODE
+node::node(int numOfChildren)
 {
-	//TODO: Figure out rotation matrices
+	childNodes = new int[numOfChildren];
 }
