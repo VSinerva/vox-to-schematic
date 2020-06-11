@@ -3,11 +3,15 @@
 
 #include <cstdint> 
 
-struct xyz
+class xyz
 {
+	public:
+
 	int x;
 	int y;
 	int z;
+
+	void translate(xyz translation);
 
 	xyz() : x(0), y(0), z(0)
 	{
@@ -34,21 +38,13 @@ struct voxel
 
 class model
 {
-	private:
+	public:
 		int id;
 		xyz size;
 
 		voxel *data;
 
-	public:
-		int getId(){ return id; }
-		void setId(int _id) { id=_id; }
-
-		xyz getSize(){ return size; }
-		void setSize(xyz _size){ size=_size; }
-
 		void translate(xyz translation);
-		void rotate(std::uint8_t rotationMatrix);
 
 		model(int _id, xyz _size);
 
@@ -56,6 +52,24 @@ class model
 		{
 			delete[] data;
 			data = nullptr;
+		}
+};
+
+class node
+{
+	public:
+		xyz translation;
+
+		int *childNodes;
+
+		void translate(xyz translation);
+
+		node(int numOfChildren);
+
+		~node()
+		{
+			delete[] childNodes;
+			childNodes = nullptr;
 		}
 };
 
