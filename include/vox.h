@@ -2,6 +2,7 @@
 #define VOX_H
 
 #include <cstdint> 
+#include <vector>
 
 class xyz
 {
@@ -42,17 +43,11 @@ class model
 		int id;
 		xyz size;
 
-		voxel *data;
+		std::vector<voxel> data;
 
 		void translate(xyz translation);
 
 		model(int _id, xyz _size);
-
-		~model()
-		{
-			delete[] data;
-			data = nullptr;
-		}
 };
 
 class node
@@ -60,17 +55,9 @@ class node
 	public:
 		xyz translation;
 
-		int *childNodes;
+		std::vector<int> childNodes;
 
 		void translate(xyz translation);
-
-		node(int numOfChildren);
-
-		~node()
-		{
-			delete[] childNodes;
-			childNodes = nullptr;
-		}
 };
 
 #endif
