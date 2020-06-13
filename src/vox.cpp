@@ -15,7 +15,7 @@ model::model(int _id, xyz _size) : id(_id), size(_size)
 {
 	//Store voxel for each xyz location to allow xyz-based indexing
 	//without knowing anything about the model as a whole 
-	data = new voxel[size.x * size.y * size.z]{};
+	data = std::vector<voxel>(size.x * size.y * size.z);
 
 	//Give locations within the model to each voxel
 	for( int x{ 0 }; x < size.x; ++x)
@@ -44,11 +44,4 @@ void model::translate(xyz translation)
 			}
 		}
 	}
-}
-
-
-//NODE
-node::node(int numOfChildren)
-{
-	childNodes = new int[numOfChildren];
 }
