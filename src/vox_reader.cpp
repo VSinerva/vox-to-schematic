@@ -7,8 +7,13 @@ void readInt(uint32_t &integer, istream &file)
 	file.read(reinterpret_cast<char*>(&integer), sizeof(integer));
 }	
 
+void readByte(uint8_t &byte, std::istream &file)
+{
+	file.read(reinterpret_cast<char*>(&byte), sizeof(byte));
+}	
 
-int idToInt(int a, int b, int c, int d)
+
+uint32_t tagToInt32(char a, char b, char c, char d)
 {
 	return (a | b<<8 | c<<16 | d<<24);
 }
@@ -22,7 +27,7 @@ bool isHeaderValid(std::istream &file)
 	//2) Followed by version number 150
 	//3) Content starts with "MAIN"
 	readInt(temp_uint32, file);
-	if(temp_uint32 != idToInt('V', 'O', 'X', ' '))
+	if(temp_uint32 != tagToInt32('V', 'O', 'X', ' '))
 	{
 		cerr << "File does not appear to be a valid .vox file (No or incorrect filetype in header)\n";
 		return false;
@@ -36,7 +41,7 @@ bool isHeaderValid(std::istream &file)
 	}
 
 	readInt(temp_uint32, file);
-	if(temp_uint32 != idToInt('M', 'A', 'I', 'N'))
+	if(temp_uint32 != tagToInt32('M', 'A', 'I', 'N'))
 	{
 		cerr << "File does not appear to be a valid .vox file (No MAIN)\n";
 		return false;
@@ -45,7 +50,7 @@ bool isHeaderValid(std::istream &file)
 	return true;
 }
 
-vector<int> readVoxFile( char* filepath)
+intMatrix_t readVoxFile( char* filepath)
 {
 	ifstream file;
 
@@ -54,12 +59,68 @@ vector<int> readVoxFile( char* filepath)
 	if(file.is_open())
 	{
 		if(isHeaderValid(file) == false)
-			return vector<int>{};
+			return intMatrix_t{}; 
+
+		uint32_t tag{0};
+		vector<model> models{};
+
+		uint32_t sizeTag	{ tagToInt32( 'S', 'I', 'Z', 'E') };
+		uint32_t transformNodeTag{ tagToInt32( 'n', 'T', 'R', 'N') };
+		uint32_t groupNodeTag{ tagToInt32( 'n', 'G', 'R', 'P') };
+		uint32_t shapeNodeTag{ tagToInt32( 'n', 'S', 'H', 'P') };
+
+		//Skip chunk info after "MAIN" tag (8 bytes) and read next tag
+		file.seekg(8, ios::cur);
+		readInt(tag, file);
+
+		//Variable to assign sequential ids to models
+		int id{0};
+
+		//Read models
+		//Identified by the "SIZE" tag
+		while(tag == sizeTag )
+		{
+			//Skip chunk info after "SIZE" tag (8 bytes)
+			file.seekg(8, ios::cur);
+
+			uint32_t size_x;
+			uint32_t size_y;
+			uint32_t size_z;
+			readInt(size_x, file);
+			readInt(size_y, file);
+			readInt(size_z, file);
+
+			models.push_back( model(id++, size_x, size_y, size_z));
+
+			//Skip "XYZI" tag and its chunk info (12 bytes)
+			file.seekg(12, ios::cur);
+
+			uint32_t nOfModels;
+			uint8_t x{0};
+			uint8_t y{0};
+			uint8_t z{0};
+			uint8_t colByte{0};
+			readInt(nOfModels, file);
+			for( int i{0}; i < nOfModels; ++i)
+			{
+				readByte(x, file);
+				readByte(y, file);
+				readByte(z, file);
+				readByte(colByte, file);
+				models.back().data[x][y][z].colorIndex = colByte;
+			}
+
+			//Read tag for next chunk
+			readInt(tag, file);
+		}
+
 
 		file.close();
-		return vector<int>{1};
+
+		intMatrix_t tempMatrix{1};
+		return tempMatrix; 
 	}
 
 	cerr << "Unable to read file\n";
-	return vector<int>{};
+	return intMatrix_t{}; 
 }

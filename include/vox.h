@@ -4,60 +4,42 @@
 #include <cstdint> 
 #include <vector>
 
-class xyz
-{
-	public:
-
-	int x;
-	int y;
-	int z;
-
-	void translate(xyz translation);
-
-	xyz() : x(0), y(0), z(0)
-	{
-	}
-
-	xyz(int _x, int _y, int _z) : x(_x), y(_y), z(_z)
-	{
-	}
-};
-
 struct voxel
 {
-	xyz loc;
-	int colorIndex;
-
-	voxel() : colorIndex(0)
-	{
-	}
-
-	voxel(xyz _loc, int _colorIndex) : loc(_loc), colorIndex(_colorIndex)
-	{
-	}
+	int x{0};
+	int y{0};
+	int z{0};
+	int colorIndex{0};
 };
+
+using voxelMatrix_t = std::vector<std::vector<std::vector<voxel>>>;
 
 class model
 {
 	public:
 		int id;
-		xyz size;
+		int size_x;
+		int size_y;
+		int size_z;
 
-		std::vector<voxel> data;
+		voxelMatrix_t data;
 
-		void translate(xyz translation);
+		voxel& at(int x, int y, int z);
+		void translate(int trans_x, int trans_y, int trans_z);
 
-		model(int _id, xyz _size);
+		model(int _id, int _size_x, int _size_y, int _size_z);
 };
 
 class node
 {
 	public:
-		xyz translation;
+		int translation_x;
+		int translation_y;
+		int translation_z;
 
 		std::vector<int> childNodes;
 
-		void translate(xyz translation);
+		void translate(int trans_x, int trans_y, int trans_z);
 };
 
 #endif
