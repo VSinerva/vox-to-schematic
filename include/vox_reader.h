@@ -9,11 +9,14 @@
 #include <vector>
 #include <cstdint>
 
-void readInt(uint32_t &integer, std::istream &file);
+using intMatrix_t = std::vector<std::vector<std::vector<int>>>;
 
-int idToInt(int a, int b, int c, int d);
+void readInt(uint32_t &integer, std::istream &file);
+void readByte(uint8_t &byte, std::istream &file);
+
+uint32_t tagToInt32(char a, char b, char c, char d);
 bool isHeaderValid(std::istream &file);
 
-std::vector<int> readVoxFile(char* filepath);
+intMatrix_t readVoxFile( char* filepath);
 
 #endif

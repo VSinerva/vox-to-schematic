@@ -1,46 +1,51 @@
 #include "vox.h"
-
-
-//XYZ
-void xyz::translate(xyz translation)
-{
-	x += translation.x;
-	y += translation.y;
-	z += translation.z;
-}
+#include <vector>
 
 
 //MODEL
-model::model(int _id, xyz _size) : id(_id), size(_size)
+model::model(int _id, int _size_x, int _size_y, int _size_z) :
+	id(_id), size_x(_size_x), size_y(_size_y), size_z(_size_z)
 {
-	//Store voxel for each xyz location to allow xyz-based indexing
-	//without knowing anything about the model as a whole 
-	data = std::vector<voxel>(size.x * size.y * size.z);
+	for(int x{0}; x < size_x; ++x)
+	{
+		data.push_back(std::vector<std::vector<voxel>>());
+		for(int y{0}; y < size_y; ++y)
+		{
+			data.back().push_back(std::vector<voxel>(size_z));
+		}
+	}
 
 	//Give locations within the model to each voxel
-	for( int x{ 0 }; x < size.x; ++x)
+	for( int x{0}; x < size_x; ++x)
 	{
-		for( int y{ 0 }; y < size.y; ++y)
+		for( int y{0}; y < size_y; ++y)
 		{
-			for( int z{ 0 }; z < size.z; ++z)
+			for( int z{0}; z < size_z; ++z)
 			{
-				data[x + size.x*( y + z*size.y)].loc = xyz(x, y, z);
+				data[x][y][z].x = x;
+				data[x][y][z].y = y;
+				data[x][y][z].z = z;
 			}
 		}
 	}
 }
 
-void model::translate(xyz translation)
+voxel& model::at(int x, int y, int z)
 {
-	//Loop over all elements with nested for-loops instead of a for-each
-	//because dynamic-arrays don't work with a for-each loop
-	for( int x{ 0 }; x < size.x; ++x)
+	return data[x][y][z];
+}
+
+void model::translate(int trans_x, int trans_y, int trans_z)
+{
+	for( std::vector<std::vector<voxel>>& vec1 : data )
 	{
-		for( int y{ 0 }; y < size.y; ++y)
+		for( std::vector<voxel>& vec2 : vec1 )
 		{
-			for( int z{ 0 }; z < size.z; ++z)
+			for( voxel& vox : vec2 )
 			{
-				data[x + size.x*( y + z*size.y)].loc.translate(translation);
+				vox.x += trans_x;
+				vox.y += trans_y;
+				vox.z += trans_z;
 			}
 		}
 	}
