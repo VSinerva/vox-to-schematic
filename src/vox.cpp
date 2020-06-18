@@ -50,3 +50,12 @@ void model::translate(int trans_x, int trans_y, int trans_z)
 		}
 	}
 }
+
+
+//NODE
+void node::translate(int trans_x, int trans_y, int trans_z)
+{
+	translation_x += trans_x;
+	translation_y += trans_y;
+	translation_z += trans_z;
+}

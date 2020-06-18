@@ -33,13 +33,22 @@ class model
 class node
 {
 	public:
-		int translation_x;
-		int translation_y;
-		int translation_z;
+		int translation_x{0};
+		int translation_y{0};
+		int translation_z{0};
+		
+		//TEMP!
+		//Rotation not implemented
+		int rotation;
 
 		std::vector<int> childNodes;
+		int modelId{-1};
 
 		void translate(int trans_x, int trans_y, int trans_z);
+
+		//TEMP!
+		//Rotation not implemented
+		void rotate(uint8_t rot);
 };
 
 #endif
