@@ -151,11 +151,84 @@ vector<model> readModels(istream &file)
 	return models;
 }
 
+node readTranslationNode(istream &file)
+{
+	uint32_t dictSize{0};
+	uint8_t byte{0};
+
+	uint32_t childId;
+	vector<int> translation(3, 0);
+	uint8_t rotation;
+
+	//TEMP!
+	//Assume no node attributes(_name and _hidden)
+	//Skip node attributes (4 bytes)
+	file.seekg(4, ios::cur);
+
+	readInt(childId, file);
+
+	//Skip reserved id, layer id and num of frames (12 bytes)
+	file.seekg(12, ios::cur);
+
+	//Read frame attributes
+	readInt(dictSize, file);
+	for(int i{0}; i < dictSize; ++i)
+	{
+		//Rotation and translation can be differentiated based on a single byte
+		//Skip bytes before that (5 bytes)
+		file.seekg(5, ios::cur);
+
+		readByte(byte, file);
+
+		if(byte == 'r')
+			rotation = readRotation(file);
+		else if(byte == 't')
+			translation = readTranslation(file);
+	}
+
+	node temp;
+	temp.childNodes.push_back(childId);
+	temp.translation_x = translation[0];
+	temp.translation_y = translation[1];
+	temp.translation_z = translation[2];
+	temp.rotation = rotation;
+
+	return temp;
+}
+
+node readGroupNode(istream &file)
+{
+	uint32_t dictSize{0};
+	uint8_t byte{0};
+
+	uint32_t nOfChildren;
+	uint32_t childId;
+
+	//TEMP!
+	//Assume no node attributes(_name and _hidden)
+	//Skip node attributes (4 bytes)
+	file.seekg(4, ios::cur);
+
+	readInt(nOfChildren, file);
+
+	node temp;
+	for(int i{0}; i < nOfChildren; ++i)
+	{
+		readInt(childId, file);
+		temp.childNodes.push_back(childId);
+	}
+
+	return temp;
+}
+
+node readShapeNode(istream &file)
+{
+}
+
 vector<node> readNodes(istream &file)
 {
 	uint32_t tag{0};
-	uint32_t dictSize{0};
-	uint8_t byte{0};
+
 	uint32_t transformTag{ tagToInt32( 	'n', 'T', 'R', 'N') };
 	uint32_t groupTag{ tagToInt32( 			'n', 'G', 'R', 'P') };
 	uint32_t shapeTag{ tagToInt32( 			'n', 'S', 'H', 'P') };
@@ -163,20 +236,13 @@ vector<node> readNodes(istream &file)
 	vector<node> nodes{};
 	uint32_t nodeId;
 
-	//Read tag for next chunk
-	readInt(tag, file);
-
 	while(true)
 	{
-		if(tag == transformTag)
+		//Read tag for next chunk
+		readInt(tag, file);
+
+		if(tag == transformTag || tag == groupTag || tag == shapeTag)
 		{
-			uint32_t childId;
-			vector<int> translation(3, 0);
-			uint8_t rotation;
-
-			//Skip chunk size info (8 bytes)
-			file.seekg(8, ios::cur);
-
 			readInt(nodeId, file);
 
 			//Place node in the vector of nodes with an index == nodeId
@@ -184,48 +250,16 @@ vector<node> readNodes(istream &file)
 			if(nodes.size() < nodeId+1)
 				nodes.resize(nodeId + 1);
 
-			nodes[nodeId] = node();
-
-			//TEMP!
-			//Assume no node attributes(_name and _hidden)
-			//Skip node attributes (4 bytes)
-			file.seekg(4, ios::cur);
-
-			readInt(childId, file);
-
-			//Skip reserved id, layer id and num of frames (12 bytes)
-			file.seekg(12, ios::cur);
-
-			//Read frame attributes
-			readInt(dictSize, file);
-			for(int i{0}; i < dictSize; ++i)
-			{
-				//Rotation and translation can be differentiated based on a single byte
-				//Skip bytes before that (5 bytes)
-				file.seekg(5, ios::cur);
-
-				readByte(byte, file);
-
-				if(byte == 'r')
-					rotation = readRotation(file);
-				else if(byte == 't')
-					translation = readTranslation(file);
-			}
-
-			nodes[nodeId].childNodes.push_back(childId);
-			nodes[nodeId].translation_x = translation[0];
-			nodes[nodeId].translation_y = translation[1];
-			nodes[nodeId].translation_z = translation[2];
-			nodes[nodeId].rotation = rotation;
+			if(transformTag)
+				nodes[nodeId] = readTranslationNode(file);
+			else if(groupTag)
+				nodes[nodeId] = readGroupNode(file);
+			else if(shapeTag)
+				nodes[nodeId] = readShapeNode(file);
 		}
 
 		else
-		{
-			//Move back before last read chunk id
-			file.seekg(-4, ios::cur);
-
 			break;
-		}
 	}
 
 	//Move back before last read chunk id
@@ -233,6 +267,8 @@ vector<node> readNodes(istream &file)
 
 	return nodes;
 }
+
+
 
 
 intMatrix_t readVoxFile( char* filepath)

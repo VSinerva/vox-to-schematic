@@ -22,6 +22,9 @@ uint8_t readRotation(std::istream &file);
 
 bool isHeaderValid(std::istream &file);
 std::vector<model> readModels(std::istream &file);
+node readTranslationNode(std::istream &file);
+node readGroupNode(std::istream &file);
+node readShapeNode(std::istream &file);
 std::vector<node> readNodes(std::istream &file);
 
 intMatrix_t readVoxFile( char* filepath);
