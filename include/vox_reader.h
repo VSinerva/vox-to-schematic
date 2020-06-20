@@ -2,6 +2,7 @@
 #define VOX_READER_H
 
 #include "vox.h"
+#include "matrix.h"
 
 #include <fstream>
 #include <iostream>
@@ -9,7 +10,6 @@
 #include <vector>
 #include <cstdint>
 
-using intMatrix_t = std::vector<std::vector<std::vector<int>>>;
 
 void readInt(uint32_t &integer, std::istream &file);
 void readByte(uint8_t &byte, std::istream &file);
@@ -30,6 +30,7 @@ std::vector<node> readNodes(std::istream &file);
 //Rotation not implemented
 void applyRotations(std::vector<node> nodes, std::vector<model> &models);
 void applyTranslations(std::vector<node> nodes, std::vector<model> &models);
+intMatrix_t modelsToMatrix(std::vector<model> models);
 
 intMatrix_t readVoxFile( char* filepath);
 

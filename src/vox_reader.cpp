@@ -284,10 +284,28 @@ vector<node> readNodes(istream &file)
 	return nodes;
 }
 
-//TEMP!
-//Rotation not implemented
 void applyRotations(std::vector<node> nodes, std::vector<model> &models)
 {
+	//Make sure there is no empty space at the end of the nodes vector
+	nodes.shrink_to_fit();
+
+	node currentNode;
+	for(int nodeId{0}; nodeId < nodes.size(); ++nodeId)
+	{
+		currentNode = nodes[nodeId];
+		for(int childId : currentNode.childNodes)
+		{
+			nodes[childId].rotate(currentNode.rotation);
+		}
+	}
+
+	for(node &node : nodes)
+	{
+		//modelId defaults to -1 and can never be -1 if it has been read from a file
+		//This checks if the nodes modelId has been set to an actual value
+		if(node.modelId != -1)
+			models[node.modelId].rotate(node.rotation);
+	}
 }
 
 void applyTranslations(std::vector<node> nodes, std::vector<model> &models)
@@ -314,6 +332,10 @@ void applyTranslations(std::vector<node> nodes, std::vector<model> &models)
 	}
 }
 
+intMatrix_t modelsToMatrix(std::vector<model> models)
+{
+}
+
 intMatrix_t readVoxFile( char* filepath)
 {
 	ifstream file;
@@ -338,8 +360,8 @@ intMatrix_t readVoxFile( char* filepath)
 		applyTranslations(nodes, models);
 
 		file.close();
-		intMatrix_t tempMatrix{1};
-		return tempMatrix; 
+
+		return modelsToMatrix(models); 
 	}
 
 	cerr << "Unable to read file\n";
