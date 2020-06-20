@@ -198,9 +198,6 @@ node readTranslationNode(istream &file)
 
 node readGroupNode(istream &file)
 {
-	uint32_t dictSize{0};
-	uint8_t byte{0};
-
 	uint32_t nOfChildren;
 	uint32_t childId;
 
@@ -223,6 +220,25 @@ node readGroupNode(istream &file)
 
 node readShapeNode(istream &file)
 {
+	uint32_t modelId;
+
+	//TEMP!
+	//Assume no node attributes(_name and _hidden)
+	//Skip node attributes (4 bytes)
+	file.seekg(4, ios::cur);
+
+	//Skip num of models because it is always 1 (4 bytes)
+	file.seekg(4, ios::cur);
+
+	readInt(modelId, file);
+
+	node temp;
+	temp.modelId = modelId;
+
+	//Skip  model attribute because it is always empty (reserved) (4 bytes)
+	file.seekg(4, ios::cur);
+
+	return temp;
 }
 
 vector<node> readNodes(istream &file)
@@ -267,8 +283,6 @@ vector<node> readNodes(istream &file)
 
 	return nodes;
 }
-
-
 
 
 intMatrix_t readVoxFile( char* filepath)
