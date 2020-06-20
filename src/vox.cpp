@@ -35,13 +35,19 @@ voxel& model::at(int x, int y, int z)
 	return data[x][y][z];
 }
 
+//TEMP!
+//Rotation not implemented
+void model::rotate(uint8_t rot)
+{
+}
+
 void model::translate(int trans_x, int trans_y, int trans_z)
 {
-	for( std::vector<std::vector<voxel>>& vec1 : data )
+	for( std::vector<std::vector<voxel>> &vec1 : data )
 	{
-		for( std::vector<voxel>& vec2 : vec1 )
+		for( std::vector<voxel> &vec2 : vec1 )
 		{
-			for( voxel& vox : vec2 )
+			for( voxel &vox : vec2 )
 			{
 				vox.x += trans_x;
 				vox.y += trans_y;
@@ -53,6 +59,12 @@ void model::translate(int trans_x, int trans_y, int trans_z)
 
 
 //NODE
+//TEMP!
+//Rotation not implemented
+void node::rotate(uint8_t rot)
+{
+}
+
 void node::translate(int trans_x, int trans_y, int trans_z)
 {
 	translation_x += trans_x;

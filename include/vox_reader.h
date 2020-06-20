@@ -30,6 +30,7 @@ std::vector<node> readNodes(std::istream &file);
 //Rotation not implemented
 void applyRotations(std::vector<node> nodes, std::vector<model> &models);
 void applyTranslations(std::vector<node> nodes, std::vector<model> &models);
+std::vector<int> getSizeAndMinsForMatrix(std::vector<model> models);
 intMatrix_t modelsToMatrix(std::vector<model> models);
 
 intMatrix_t readVoxFile( char* filepath);

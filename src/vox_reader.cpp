@@ -14,12 +14,12 @@ void readByte(uint8_t &byte, istream &file)
 
 //TEMP!
 //Rotation not implemented
-uint8_t readRotation(std::istream &file)
+uint8_t readRotation(istream &file)
 {
 	return uint8_t{0};
 }
 
-vector<int> readTranslation(std::istream &file)
+vector<int> readTranslation(istream &file)
 {
 	uint32_t stringLength;
 	uint8_t byte;
@@ -284,7 +284,7 @@ vector<node> readNodes(istream &file)
 	return nodes;
 }
 
-void applyRotations(std::vector<node> nodes, std::vector<model> &models)
+void applyRotations(vector<node> nodes, vector<model> &models)
 {
 	//Make sure there is no empty space at the end of the nodes vector
 	nodes.shrink_to_fit();
@@ -308,7 +308,7 @@ void applyRotations(std::vector<node> nodes, std::vector<model> &models)
 	}
 }
 
-void applyTranslations(std::vector<node> nodes, std::vector<model> &models)
+void applyTranslations(vector<node> nodes, vector<model> &models)
 {
 	//Make sure there is no empty space at the end of the nodes vector
 	nodes.shrink_to_fit();
@@ -332,8 +332,89 @@ void applyTranslations(std::vector<node> nodes, std::vector<model> &models)
 	}
 }
 
-intMatrix_t modelsToMatrix(std::vector<model> models)
+vector<int> getSizeAndMinsForMatrix(vector<model> models)
 {
+	int minX{0};
+	int maxX{0};
+	int minY{0};
+	int maxY{0};
+	int minZ{0};
+	int maxZ{0};
+
+	//Check largest and smallest coordinates for each axis across all models
+	//Check all corners because rotation is unknown
+	for(model &model : models)
+	{
+		int xMaxIndex{model.size_x - 1};
+		int yMaxIndex{model.size_y - 1};
+		int zMaxIndex{model.size_z - 1};
+
+		vector<voxel> corners;
+		corners.push_back({model.at(0,					0,					0)});
+		corners.push_back({model.at(xMaxIndex,	0,					0)});
+		corners.push_back({model.at(0, 					yMaxIndex,	0)});
+		corners.push_back({model.at(0,					0,					zMaxIndex)});
+		corners.push_back({model.at(xMaxIndex,	yMaxIndex,	0)});
+		corners.push_back({model.at(xMaxIndex,	0,					zMaxIndex)});
+		corners.push_back({model.at(0,					yMaxIndex,	zMaxIndex)});
+		corners.push_back({model.at(xMaxIndex,	yMaxIndex,	zMaxIndex)});
+
+		for(voxel &vox : corners)
+		{
+			if(vox.x < minX) minX = vox.x;
+			if(vox.x > maxX) maxX = vox.x;
+
+			if(vox.y < minY) minY = vox.y;
+			if(vox.y > maxY) maxY = vox.y;
+
+			if(vox.z < minZ) minZ = vox.z;
+			if(vox.z > maxZ) maxZ = vox.z;
+		}
+	}
+
+	vector<int> sizes;
+	sizes.push_back(maxX - minX + 1);
+	sizes.push_back(maxY - minY + 1);
+	sizes.push_back(maxZ - minZ + 1);
+	sizes.push_back(minX);
+	sizes.push_back(minY);
+	sizes.push_back(minZ);
+
+	return sizes;
+}
+
+intMatrix_t modelsToMatrix(vector<model> models)
+{
+	//Make sure there is no empty space at the end of the models vector
+	models.shrink_to_fit();
+
+	intMatrix_t resultMatrix;
+
+	vector<int> sizesAndMins{getSizeAndMinsForMatrix(models)};
+
+	resizeMatrix(resultMatrix, sizesAndMins[0], sizesAndMins[1], sizesAndMins[2]);
+
+	for(int modelId{0}; modelId < models.size(); ++modelId)
+	{
+		for(vector<vector<voxel>> &vec1 : models[modelId].data)
+		{
+			for(vector<voxel> &vec2 : vec1)
+			{
+				for(voxel &vox : vec2)
+				{
+					if(vox.colorIndex != 0)
+					{
+						resultMatrix
+							[vox.x - sizesAndMins[0]]
+							[vox.y - sizesAndMins[1]]
+								[vox.z - sizesAndMins[2]] = vox.colorIndex;
+					}
+				}
+			}
+		}
+	}
+
+	return resultMatrix;
 }
 
 intMatrix_t readVoxFile( char* filepath)
