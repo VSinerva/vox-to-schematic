@@ -36,3 +36,9 @@
 /build
 /.clangd
 compile_commands.json
+CMakeSettings.json
+/V2SGUI/obj
+/V2SGUI/bin
+/V2SGUI/.vs
+/.vs
+/out

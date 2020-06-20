@@ -46,7 +46,7 @@ namespace V2SGUI
             Process proc = new Process();
 
             proc.StartInfo.FileName = ".\\V2S.exe";
-            proc.StartInfo.CreateNoWindow = true;
+            proc.StartInfo.CreateNoWindow = false;
             proc.StartInfo.Arguments = textBox1.Text + ' ' + textBox2.Text;
             proc.Start();
         }
