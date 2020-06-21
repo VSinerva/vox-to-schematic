@@ -154,6 +154,7 @@ vector<model> readModels(istream &file)
 node readTranslationNode(istream &file)
 {
 	uint32_t dictSize{0};
+	uint32_t stringLength{0};
 	uint8_t byte{0};
 
 	uint32_t childId;
@@ -161,9 +162,17 @@ node readTranslationNode(istream &file)
 	uint8_t rotation;
 
 	//TEMP!
-	//Assume no node attributes(_name and _hidden)
-	//Skip node attributes (4 bytes)
-	file.seekg(4, ios::cur);
+	//Ignore node attributes(_name and _hidden)
+	readInt(dictSize, file);
+	for(int i{0}; i < dictSize; ++i)
+	{
+		//Repeat action twice: once for key and once for value
+		readInt(stringLength, file);
+		file.seekg(stringLength, ios::cur);
+
+		readInt(stringLength, file);
+		file.seekg(stringLength, ios::cur);
+	}
 
 	readInt(childId, file);
 
@@ -198,13 +207,24 @@ node readTranslationNode(istream &file)
 
 node readGroupNode(istream &file)
 {
+	uint32_t dictSize{0};
+	uint32_t stringLength{0};
+
 	uint32_t nOfChildren;
 	uint32_t childId;
 
 	//TEMP!
-	//Assume no node attributes(_name and _hidden)
-	//Skip node attributes (4 bytes)
-	file.seekg(4, ios::cur);
+	//Ignore node attributes(_name and _hidden)
+	readInt(dictSize, file);
+	for(int i{0}; i < dictSize; ++i)
+	{
+		//Repeat action twice: once for key and once for value
+		readInt(stringLength, file);
+		file.seekg(stringLength, ios::cur);
+
+		readInt(stringLength, file);
+		file.seekg(stringLength, ios::cur);
+	}
 
 	readInt(nOfChildren, file);
 
@@ -220,12 +240,23 @@ node readGroupNode(istream &file)
 
 node readShapeNode(istream &file)
 {
+	uint32_t dictSize{0};
+	uint32_t stringLength{0};
+
 	uint32_t modelId;
 
 	//TEMP!
-	//Assume no node attributes(_name and _hidden)
-	//Skip node attributes (4 bytes)
-	file.seekg(4, ios::cur);
+	//Ignore node attributes(_name and _hidden)
+	readInt(dictSize, file);
+	for(int i{0}; i < dictSize; ++i)
+	{
+		//Repeat action twice: once for key and once for value
+		readInt(stringLength, file);
+		file.seekg(stringLength, ios::cur);
+
+		readInt(stringLength, file);
+		file.seekg(stringLength, ios::cur);
+	}
 
 	//Skip num of models because it is always 1 (4 bytes)
 	file.seekg(4, ios::cur);
