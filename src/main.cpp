@@ -1,5 +1,5 @@
 #include "vox_reader.h"
-#include "schematic.h"
+#include "schematic_writer.h"
 
 int main(int argc, char* argv[])
 {
