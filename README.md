@@ -4,8 +4,8 @@ Copyright 2020 Vili Sinervä
 ## DOES NOT CURRENTLY WORK - CHECK BACK LATER
 
 ## Known limitations and bugs
-- Program doesn't work with files where nodes have names or are hidden
-- Program doesn't take model rotation into account
+- Program ignores node attributes (name, hidden)
+- Program ignores model rotation
 
 ## Blocks by MagicaVoxel palette id
 1.	acacia leaves 
