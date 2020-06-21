@@ -10,5 +10,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
+	writeSchematic(matrix, argv[2]);
+
 	return 0;
 }
