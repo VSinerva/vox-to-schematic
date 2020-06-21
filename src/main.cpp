@@ -7,10 +7,9 @@ int main(int argc, char* argv[])
 	if(matrix.empty())
 	{
 		std::cerr << "Aborting...\n";
-		return 1;
 	}
 
-	writeSchematic(matrix, argv[2]);
+	writeSchematicFile(matrix, argv[2]);
 
 	return 0;
 }

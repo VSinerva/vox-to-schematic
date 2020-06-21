@@ -290,6 +290,9 @@ vector<node> readNodes(istream &file)
 
 		if(tag == transformTag || tag == groupTag || tag == shapeTag)
 		{
+			//Skip chunk info after tag (8 bytes)
+			file.seekg(8, ios::cur);
+
 			readInt(nodeId, file);
 
 			//Place node in the vector of nodes with an index == nodeId
@@ -297,12 +300,13 @@ vector<node> readNodes(istream &file)
 			if(nodes.size() < nodeId+1)
 				nodes.resize(nodeId + 1);
 
-			if(transformTag)
+			if(tag == transformTag)
 				nodes[nodeId] = readTranslationNode(file);
-			else if(groupTag)
+			else if(tag == groupTag)
 				nodes[nodeId] = readGroupNode(file);
-			else if(shapeTag)
+			else if(tag == shapeTag)
 				nodes[nodeId] = readShapeNode(file);
+
 		}
 
 		else
@@ -436,9 +440,9 @@ intMatrix_t modelsToMatrix(vector<model> models)
 					if(vox.colorIndex != 0)
 					{
 						resultMatrix
-							[vox.x - sizesAndMins[0]]
-							[vox.y - sizesAndMins[1]]
-								[vox.z - sizesAndMins[2]] = vox.colorIndex;
+							[vox.x - sizesAndMins[3]]
+							[vox.y - sizesAndMins[4]]
+								[vox.z - sizesAndMins[5]] = vox.colorIndex;
 					}
 				}
 			}
