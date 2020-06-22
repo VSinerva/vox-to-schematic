@@ -11,6 +11,6 @@ add_executable(V2S ${SOURCES})
 set(MY_DEBUG_OPTIONS "-std=c++17 -O3 -g -o")
 
 target_compile_definitions(V2S PUBLIC) 
-find_library(LIBZ_LIBRARY libz.a.a HINTS "/usr/local/lib")
+find_library(LIBZ_LIBRARY libz.a HINTS "/usr/local/lib")
 target_link_libraries(V2S PUBLIC ${LIBZ_LIBRARY}) 
 add_compile_options("$<$<CONFIG:DEBUG>:${MY_DEBUG_OPTIONS}>")

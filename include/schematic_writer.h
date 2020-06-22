@@ -3,7 +3,6 @@
 
 #include "matrix.h"
 #include "zlib.h"
-#include "zipconf.h"
 
 #include <fstream>
 #include <iostream>
@@ -30,6 +29,6 @@ void writeSize(intMatrix_t &matrix, std::ostream &file);
 void writeBlocks(intMatrix_t &matrix, std::ostream &file);
 void writeData(intMatrix_t &matrix, std::ostream &file);
 
-void writeSchematicFile(intMatrix_t &matrix, char* filepath);
+int writeSchematicFile(intMatrix_t &matrix, char* filepath);
 
 #endif

@@ -103,7 +103,7 @@ void writeData(intMatrix_t &matrix, std::ostream &file)
 }
 
 
-void writeSchematicFile(intMatrix_t &matrix, char* filepath)
+int writeSchematicFile(intMatrix_t &matrix, char* filepath)
 {
 	fstream file;
 
@@ -141,8 +141,9 @@ void writeSchematicFile(intMatrix_t &matrix, char* filepath)
 		gzclose(fi);
 
 		delete[] memBlock;
+		return 0;
 	}
 
-	else
-		cerr << "Unable to write file\n";
+	cerr << "Unable to write file\n";
+	return 1;
 }
