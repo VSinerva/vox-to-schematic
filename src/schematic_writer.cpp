@@ -105,9 +105,9 @@ void writeData(intMatrix_t &matrix, std::ostream &file)
 
 void writeSchematicFile(intMatrix_t &matrix, char* filepath)
 {
-	ofstream file;
+	fstream file;
 
-	file.open(filepath, ios::binary);
+	file.open(filepath, ios::binary | ios::out);
 
 	if(file.is_open())
 	{
@@ -124,7 +124,23 @@ void writeSchematicFile(intMatrix_t &matrix, char* filepath)
 		//Write ending tag for file
 		writeByte(0, file);
 
+		//Close file and reopen in read mode
 		file.close();
+		file.open(filepath, ios::binary | ios::in | ios::ate);
+
+		//Read contents of resulting file into memory for compression
+		streampos size{file.tellg()};
+		char* memBlock{new char[size]};
+		file.seekg(0, ios::beg);
+		file.read(memBlock, size);
+		file.close();
+
+		//Compress resulting file with gzip
+		gzFile fi = gzopen(filepath,"wb");
+		gzwrite(fi, memBlock, size);
+		gzclose(fi);
+
+		delete[] memBlock;
 	}
 
 	else

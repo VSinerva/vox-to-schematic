@@ -2,6 +2,8 @@
 #define SCHEMATIC_WRITER_H
 
 #include "matrix.h"
+#include "zlib.h"
+#include "zipconf.h"
 
 #include <fstream>
 #include <iostream>
