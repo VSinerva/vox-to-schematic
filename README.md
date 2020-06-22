@@ -4,6 +4,7 @@ Copyright 2020 Vili Sinervä
 ## DOES NOT CURRENTLY WORK - CHECK BACK LATER
 
 ## Known limitations and bugs
+- Minecraft Java Edition 1.12.2 and earlier only!
 - Program ignores node attributes (name, hidden)
 - Program ignores model rotation
 
