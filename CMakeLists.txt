@@ -11,4 +11,4 @@ add_executable(V2S ${SOURCES})
 set(MY_DEBUG_OPTIONS "-std=c++17 -O3 -g -o")
 
 target_compile_definitions(V2S PUBLIC) 
-target_compile_options(V2S PUBLIC "$<$<CONFIG:DEBUG>:${MY_DEBUG_OPTIONS}>")
+add_compile_options("$<$<CONFIG:DEBUG>:${MY_DEBUG_OPTIONS}>")
