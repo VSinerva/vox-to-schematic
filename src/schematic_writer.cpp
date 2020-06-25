@@ -111,6 +111,17 @@ int writeSchematicFile(intMatrix_t &matrix, char* filepath)
 
 	if(file.is_open())
 	{
+		//Check size of matrix.
+		//Max 256x256x256
+		vector<int> sizes{getMatrixSize(matrix)};
+		if(sizes[0] < 1 || sizes[0] > 256 ||
+				sizes[1] < 1 || sizes[1] > 256 ||
+				sizes[2] < 1 || sizes[2] > 256)
+		{
+			file.close();
+			return 1;
+		}
+
 		writeTag(uint8_t{10}, "Schematic", file);
 
 		writeSize(matrix, file);

@@ -461,7 +461,10 @@ intMatrix_t readVoxFile( char* filepath)
 	if(file.is_open())
 	{
 		if(isHeaderValid(file) == false)
+		{
+			file.close();
 			return intMatrix_t{}; 
+		}
 
 		//Read models
 		vector<model> models{readModels(file)};
