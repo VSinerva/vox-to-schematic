@@ -227,5 +227,5 @@ Copyright 2020 Vili Sinervä
 218.	yellow glazed terracotta
 219.	yellow shulker box
 220.	yellow stained glass
-221		yellow terracotta
+221.  yellow terracotta
 222.	yellow wool
