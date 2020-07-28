@@ -19,14 +19,10 @@ void writeShort(uint16_t integer, ostream &file)
 void writeInt(uint32_t integer, ostream &file)
 {
 	//Convert default little-endian int to big-endian
-	integer = ((integer & 0b0000'0000'0000'0000'0000'0000'0000'1111) << 28)
-					+ ((integer & 0b0000'0000'0000'0000'0000'0000'1111'0000) << 20)
-					+ ((integer & 0b0000'0000'0000'0000'0000'1111'0000'0000) << 12)
-					+ ((integer & 0b0000'0000'0000'0000'1111'0000'0000'0000) << 4)
-					+ ((integer & 0b0000'0000'0000'1111'0000'0000'0000'0000) >> 4)
-					+ ((integer & 0b0000'0000'1111'0000'0000'0000'0000'0000) >> 12)
-					+ ((integer & 0b0000'1111'0000'0000'0000'0000'0000'0000) >> 20)
-					+ ((integer & 0b1111'0000'0000'0000'0000'0000'0000'0000) >> 28);
+	integer = ((integer & 0b0000'0000'0000'0000'0000'0000'1111'1111) << 24)
+					+ ((integer & 0b0000'0000'0000'0000'1111'1111'0000'0000) << 8)
+					+ ((integer & 0b0000'0000'1111'1111'0000'0000'0000'0000) >> 8)
+					+ ((integer & 0b1111'1111'0000'0000'0000'0000'0000'0000) >> 24);
 
 	file.write(reinterpret_cast<char*>(&integer), sizeof(integer));
 }
@@ -77,7 +73,7 @@ void writeBlocks(intMatrix_t &matrix, std::ostream &file)
 		{
 			for(int x{0}; x < sizes[0]; ++x)
 			{
-				writeByte(blockIds[0], file);
+				writeByte(blockIds[matrix[x][y][z]], file);
 			}
 		}
 	}
@@ -96,7 +92,7 @@ void writeData(intMatrix_t &matrix, std::ostream &file)
 		{
 			for(int x{0}; x < sizes[0]; ++x)
 			{
-				writeByte(dataValues[0], file);
+				writeByte(dataValues[matrix[x][y][z]], file);
 			}
 		}
 	}
