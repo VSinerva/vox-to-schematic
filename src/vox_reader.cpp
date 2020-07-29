@@ -369,12 +369,12 @@ void applyTranslations(vector<node> nodes, vector<model> &models)
 
 vector<int> getSizeAndMinsForMatrix(vector<model> models)
 {
-	int minX{0};
-	int maxX{0};
-	int minY{0};
-	int maxY{0};
-	int minZ{0};
-	int maxZ{0};
+	int minX{models[0].data[0][0][0].x};
+	int maxX{models[0].data[0][0][0].x};
+	int minY{models[0].data[0][0][0].y};
+	int maxY{models[0].data[0][0][0].y};
+	int minZ{models[0].data[0][0][0].z};
+	int maxZ{models[0].data[0][0][0].z};
 
 	//Check largest and smallest coordinates for each axis across all models
 	//Check all corners because rotation is unknown
