@@ -126,6 +126,7 @@ int writeSchematicFile(intMatrix_t &matrix, char* filepath)
 				sizes[2] < 1 || sizes[2] > 256)
 		{
 			file.close();
+			cerr << "Model too big (max 256 in each direction\n";
 			return 1;
 		}
 
