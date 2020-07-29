@@ -538,6 +538,7 @@ void writeTag(uint8_t byte, const char* tagName, std::ostream &file);
 void writeSize(intMatrix_t &matrix, std::ostream &file);
 void writeBlocks(intMatrix_t &matrix, std::ostream &file);
 void writeData(intMatrix_t &matrix, std::ostream &file);
+void writeEntityLists(std::ostream &file);
 
 int writeSchematicFile(intMatrix_t &matrix, char* filepath);
 

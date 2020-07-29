@@ -98,6 +98,17 @@ void writeData(intMatrix_t &matrix, ostream &file)
 	}
 }
 
+void writeEntityLists(ostream &file)
+{
+writeTag(9, "Entities", file);
+writeByte(10, file);
+writeInt(0, file);
+
+writeTag(9, "TileEntities", file);
+writeByte(10, file);
+writeInt(0, file);
+}
+
 
 int writeSchematicFile(intMatrix_t &matrix, char* filepath)
 {
@@ -127,6 +138,8 @@ int writeSchematicFile(intMatrix_t &matrix, char* filepath)
 
 		writeBlocks(matrix, file);
 		writeData(matrix, file);
+
+		writeEntityLists(file);
 
 		//Write ending tag for file
 		writeByte(0, file);
