@@ -60,7 +60,7 @@ void writeSize(intMatrix_t &matrix, ostream &file)
 	writeShort(zSize, file);
 }
 
-void writeBlocks(intMatrix_t &matrix, std::ostream &file)
+void writeBlocks(intMatrix_t &matrix, ostream &file)
 {
 	vector<int> sizes{getMatrixSize(matrix)};
 
@@ -79,7 +79,7 @@ void writeBlocks(intMatrix_t &matrix, std::ostream &file)
 	}
 }
 
-void writeData(intMatrix_t &matrix, std::ostream &file)
+void writeData(intMatrix_t &matrix, ostream &file)
 {
 	vector<int> sizes{getMatrixSize(matrix)};
 
