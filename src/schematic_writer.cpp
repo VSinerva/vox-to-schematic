@@ -67,13 +67,13 @@ void writeBlocks(intMatrix_t &matrix, ostream &file)
 	writeTag(7, "Blocks", file);
 	writeInt(sizes[0] * sizes[1] * sizes[2], file);
 
-	for(int y{0}; y < sizes[1]; ++y)
+	for(int y{0}; y < sizes[2] ; ++y)
 	{
-		for(int z{0}; z < sizes[2]; ++z)
+		for(int z{0}; z < sizes[1]; ++z)
 		{
-			for(int x{0}; x < sizes[0]; ++x)
+			for(int x{sizes[0] - 1}; x >= 0; --x)
 			{
-				writeByte(blockIds[matrix[x][y][z]], file);
+				writeByte(blockIds[matrix[x][z][y]], file);
 			}
 		}
 	}
@@ -86,13 +86,13 @@ void writeData(intMatrix_t &matrix, ostream &file)
 	writeTag(7, "Data", file);
 	writeInt(sizes[0] * sizes[1] * sizes[2], file);
 
-	for(int y{0}; y < sizes[1]; ++y)
+	for(int y{0}; y < sizes[2] ; ++y)
 	{
-		for(int z{0}; z < sizes[2]; ++z)
+		for(int z{0}; z < sizes[1]; ++z)
 		{
-			for(int x{0}; x < sizes[0]; ++x)
+			for(int x{sizes[0] - 1}; x >= 0; --x)
 			{
-				writeByte(dataValues[matrix[x][y][z]], file);
+				writeByte(dataValues[matrix[x][z][y]], file);
 			}
 		}
 	}
