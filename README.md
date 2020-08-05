@@ -1,7 +1,7 @@
 # vox-to-schematic
 Copyright 2020 Vili Sinervä
 
-## Reuqirements
+## Requirements
 - Requires zlib
 
 ## Known limitations and bugs
