@@ -11,7 +11,7 @@ void writeShort(uint16_t integer, ostream &file)
 {
 	//Convert default little-endian short to big-endian
 	integer = ((integer & 0b0000'0000'1111'1111) << 8)
-					+ ((integer & 0b1111'1111'0000'0000) >> 8);
+		+ ((integer & 0b1111'1111'0000'0000) >> 8);
 
 	file.write(reinterpret_cast<char*>(&integer), sizeof(integer));
 }
@@ -20,9 +20,9 @@ void writeInt(uint32_t integer, ostream &file)
 {
 	//Convert default little-endian int to big-endian
 	integer = ((integer & 0b0000'0000'0000'0000'0000'0000'1111'1111) << 24)
-					+ ((integer & 0b0000'0000'0000'0000'1111'1111'0000'0000) << 8)
-					+ ((integer & 0b0000'0000'1111'1111'0000'0000'0000'0000) >> 8)
-					+ ((integer & 0b1111'1111'0000'0000'0000'0000'0000'0000) >> 24);
+		+ ((integer & 0b0000'0000'0000'0000'1111'1111'0000'0000) << 8)
+		+ ((integer & 0b0000'0000'1111'1111'0000'0000'0000'0000) >> 8)
+		+ ((integer & 0b1111'1111'0000'0000'0000'0000'0000'0000) >> 24);
 
 	file.write(reinterpret_cast<char*>(&integer), sizeof(integer));
 }
@@ -47,8 +47,8 @@ void writeSize(intMatrix_t &matrix, ostream &file)
 {
 	vector<int> sizes{getMatrixSize(matrix)};
 	uint16_t xSize{static_cast<uint16_t>(sizes[0])};
-	uint16_t ySize{static_cast<uint16_t>(sizes[1])};
-	uint16_t zSize{static_cast<uint16_t>(sizes[2])};
+	uint16_t zSize{static_cast<uint16_t>(sizes[1])};
+	uint16_t ySize{static_cast<uint16_t>(sizes[2])};
 
 	writeTag(uint8_t{2}, "Width", file);
 	writeShort(xSize, file);
@@ -100,13 +100,13 @@ void writeData(intMatrix_t &matrix, ostream &file)
 
 void writeEntityLists(ostream &file)
 {
-writeTag(9, "Entities", file);
-writeByte(10, file);
-writeInt(0, file);
+	writeTag(9, "Entities", file);
+	writeByte(10, file);
+	writeInt(0, file);
 
-writeTag(9, "TileEntities", file);
-writeByte(10, file);
-writeInt(0, file);
+	writeTag(9, "TileEntities", file);
+	writeByte(10, file);
+	writeInt(0, file);
 }
 
 
