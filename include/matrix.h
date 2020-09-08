@@ -6,6 +6,6 @@
 using intMatrix_t = std::vector<std::vector<std::vector<int>>>;
 
 void resizeMatrix(intMatrix_t &matrix, int size_x, int size_y, int size_z);
-std::vector<int> getMatrixSize(intMatrix_t &matrix);
+std::vector<int> getMatrixSize(const intMatrix_t &matrix);
 
 #endif

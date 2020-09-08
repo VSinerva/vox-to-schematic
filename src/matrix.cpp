@@ -17,7 +17,7 @@ void resizeMatrix(intMatrix_t &matrix, int size_x, int size_y, int size_z)
 	}
 }
 
-vector<int> getMatrixSize(intMatrix_t &matrix)
+vector<int> getMatrixSize(const intMatrix_t &matrix)
 {
 	vector<int> sizes;
 	sizes.push_back(static_cast<int>(matrix.size()));

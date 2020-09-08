@@ -1,4 +1,5 @@
 #include "schematic_writer.h"
+#include <string>
 
 using namespace std;
 
@@ -43,7 +44,7 @@ void writeTag(uint8_t tagByte, const char* tagName, ostream &file)
 }
 
 
-void writeSize(intMatrix_t &matrix, ostream &file)
+void writeSize(const intMatrix_t &matrix, ostream &file)
 {
 	vector<int> sizes{getMatrixSize(matrix)};
 	uint16_t xSize{static_cast<uint16_t>(sizes[0])};
@@ -60,7 +61,7 @@ void writeSize(intMatrix_t &matrix, ostream &file)
 	writeShort(zSize, file);
 }
 
-void writeBlocks(intMatrix_t &matrix, ostream &file)
+void writeBlocks(const vector<uint8_t> &blockIds, const intMatrix_t &matrix, ostream &file)
 {
 	vector<int> sizes{getMatrixSize(matrix)};
 
@@ -79,7 +80,7 @@ void writeBlocks(intMatrix_t &matrix, ostream &file)
 	}
 }
 
-void writeData(intMatrix_t &matrix, ostream &file)
+void writeData(const vector<uint8_t> &dataValues, const intMatrix_t &matrix, ostream &file)
 {
 	vector<int> sizes{getMatrixSize(matrix)};
 
@@ -110,7 +111,29 @@ void writeEntityLists(ostream &file)
 }
 
 
-int writeSchematicFile(intMatrix_t &matrix, char* filepath)
+void readPaletteFile(vector<uint8_t> &paletteVector, char* filepath)
+{
+	ifstream file;
+	string line;
+
+	file.open(filepath);
+
+	if(file.is_open())
+	{
+		int i{ 0 };
+		while (getline( file, line ))
+		{
+			paletteVector[i++] = stoi(line);
+		}
+	}
+
+	file.close();
+}
+
+int writeSchematicFile(	const vector<uint8_t> &blockIds,
+												const vector<uint8_t> &dataValues,
+												const intMatrix_t &matrix,
+												const char* filepath)
 {
 	fstream file;
 
@@ -137,8 +160,8 @@ int writeSchematicFile(intMatrix_t &matrix, char* filepath)
 		writeTag(uint8_t{8}, "Materials", file);
 		writeString("Alpha", file);
 
-		writeBlocks(matrix, file);
-		writeData(matrix, file);
+		writeBlocks(blockIds, matrix, file);
+		writeData(dataValues, matrix, file);
 
 		writeEntityLists(file);
 
