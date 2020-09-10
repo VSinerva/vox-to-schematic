@@ -429,6 +429,18 @@ intMatrix_t modelsToMatrix(vector<model> models)
 
 	resizeMatrix(resultMatrix, sizesAndMins[0], sizesAndMins[1], sizesAndMins[2]);
 
+	//Set all values to 0
+	for(vector<vector<int>> &vec1 : resultMatrix)
+	{
+		for(vector<int> &vec2 : vec1)
+		{
+			for(int &value : vec2)
+			{
+				value = 0;
+			}
+		}
+	}
+
 	for(int modelId{0}; modelId < models.size(); ++modelId)
 	{
 		for(vector<vector<voxel>> &vec1 : models[modelId].data)
