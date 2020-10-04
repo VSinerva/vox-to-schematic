@@ -21,7 +21,7 @@ void writeBlocks(const std::vector<uint8_t> &blockIds, const intMatrix_t &matrix
 void writeData(const std::vector<uint8_t> &dataValues, const intMatrix_t &matrix, std::ostream &file);
 void writeEntityLists(std::ostream &file);
 
-void readPaletteFile(std::vector<uint8_t> &paletteVector, char* filepath);
+void readPaletteFile(std::vector<uint8_t> &paletteVector, const char* filepath);
 int writeSchematicFile(	const std::vector<uint8_t> &blockIds,
 												const std::vector<uint8_t> &dataValues,
 												const intMatrix_t &matrix,

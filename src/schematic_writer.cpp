@@ -111,7 +111,7 @@ void writeEntityLists(ostream &file)
 }
 
 
-void readPaletteFile(vector<uint8_t> &paletteVector, char* filepath)
+void readPaletteFile(vector<uint8_t> &paletteVector, const char* filepath)
 {
 	ifstream file;
 	string line;
